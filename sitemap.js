@@ -37,8 +37,23 @@ casper.start(url, function() {
 
 	//Start new batch of tests using urls
 	casper.start().each(urls, function(self, url) {
-		self.thenOpen(url, function() {
-		    this.test.assertExists('title', 'title tag exists');
+		self.thenOpen(url, function(page) {
+			this.test.assertHttpStatus(200, 'url returns 200 OK');
+			this.test.assertExists('title', 'title tag exists ' + this);
+			this.test.assertTrue(this.getTitle().length > 5, 'title length > 5')
+			this.test.assertExists('h1', 'h1 tag exists ' + this);
+			this.test.assertExists('meta', 'meta tag(s) exists ' + this);
+			this.test.assertExists('meta[name="description"]', 'meta description tag exists ' + this);
+
+			this.test.assertEval(function() {
+				return __utils__.findAll('h1').length == 1;
+			}, 'only one h1 tag per page ' + this);
+			
+			this.test.assertEval(function() {
+				return __utils__.findOne('meta[name="description"]').getAttribute("name").length <= 160;
+			}, 'meta description <= 160 chars ' + this);
+			
+
 		});
 	});
 
