@@ -5,7 +5,7 @@ Checks if title tag exists
 var url = 'http://www.folkas.com/sitemap';
 
 var casper = require('casper').create({
-	verbose: true,
+	verbose: false,
 	logLevel: "info",
 	onError: function(self, m) {   // Any "error" level message will be written
 			console.log('FATAL:' + m); // on the console output and PhantomJS will
@@ -18,7 +18,7 @@ var casper = require('casper').create({
 	viewportSize: {width: 1024, height: 768}
 });
 
-var urls = [];
+
 
 //Start casper by fetching sitemap xml
 casper.start(url, function() {
@@ -28,6 +28,8 @@ casper.start(url, function() {
 	
 	//Find all loc nodes, and store url inside in array
 	var locNodes = doc.querySelectorAll("loc");
+
+	var urls = [];
 
 	for(var i = 0; i < locNodes.length; i++) {
 		urls.push(locNodes[i].childNodes[0].data);
@@ -46,7 +48,5 @@ casper.start(url, function() {
 	});
 });
 
-
-
-//Run all steps
+//Run sitemap step
 casper.run();
