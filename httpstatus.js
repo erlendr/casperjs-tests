@@ -1,9 +1,13 @@
 /*
-Exits with code 1 if 404 or 500
+HTTP status 200 test 
 */
-var url = 'http://brage.no/om-oss/1';
+
+//Url to test
+var url = "http://brage.no/bedrift/";
+
+//Init casper
 var casper = require('casper').create({
-	verbose: true,
+	verbose: false,
 	logLevel: "info",
 	onError: function(self, m) {   // Any "error" level message will be written
 		console.log('FATAL:' + m); // on the console output and PhantomJS will
@@ -12,22 +16,27 @@ var casper = require('casper').create({
 	pageSettings: {
 		loadImages:  false,        // The WebPage instance used by Casper will
 		loadPlugins: false         // use these settings
-	},
-	httpStatusHandlers: {
-		404: function(self, resource) {
-			this.echo("Resource at " + resource.url + " not found (404)", "COMMENT");
-			this.exit(1);
-		},
-		500: function(self, resource) {
-			this.echo("Resource at " + resource.url + " error (500)", "COMMENT");
-			this.exit(1);
-		}
-	},
+	}
 });
 
-casper.start(url, function() {
-	this.echo("Done.");
-	this.exit();
-});
+//Start casper using specified url
+casper.start(url);
 
-casper.run();
+//HTTP 200 status test
+var httpStatus = function() {
+	this.test.assertHttpStatus(200, 'url returns 200 OK');	
+};
+
+//Add navigation step
+casper.then(httpStatus);
+
+//Run all steps
+casper.run(function() {
+	//All steps complete
+
+	//Set test done
+	this.test.done();
+
+	//Render results to console
+	this.test.renderResults(true, 0);
+});
