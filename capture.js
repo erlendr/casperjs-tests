@@ -1,3 +1,7 @@
+/*
+Capture
+*/
+
 var url = 'http://brage.no/om-oss/';
 var casper = require('casper').create({
 	verbose: true,
@@ -7,14 +11,12 @@ var casper = require('casper').create({
 		self.exit();               // terminate
 	},
 	pageSettings: {
-		loadImages:  false,        // The WebPage instance used by Casper will
+		loadImages:  true,        // The WebPage instance used by Casper will
 		loadPlugins: false         // use these settings
 	}
 });
 
-casper.start(url, function() {
-	this.test.assert(this.getCurrentUrl() === url, 'url is the one expected');
-});
+casper.start(url);
 
 casper.then(function() {
 	this.capture('brage.png', {
